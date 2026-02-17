@@ -1,5 +1,6 @@
 package com.guillotine.jscorekeeper.composable.general
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,9 +10,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ListItemDefaults.colors
+import androidx.compose.material3.ListItemDefaults.shapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +29,7 @@ import com.guillotine.jscorekeeper.R
 import com.guillotine.jscorekeeper.data.ClueTypeRadioButtonOptions
 import com.guillotine.jscorekeeper.data.GameModes
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun RadioButtonList(
     currentSelectedOption: ClueTypeRadioButtonOptions? = null,
@@ -35,9 +42,9 @@ fun RadioButtonList(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        HorizontalDivider()
         // selectableGroup used for accessibility reasons.
         Column(
+            verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
             modifier = if (scrollable) {
                 Modifier
                     .selectableGroup()
@@ -53,27 +60,29 @@ fun RadioButtonList(
                 // Could I have stored this as a list in the XML? Probably. But I feel like it's going
                 // to be nicer to handle this in the ViewModel as an enum than as a bunch of strings.
                 listOfOptions.forEach { stringID ->
-                    Row(
-                        Modifier
-                            .height(56.dp)
-                            .fillMaxWidth()
-                            .selectable(
+                    SegmentedListItem(
+                        selected = (currentSelectedOption == stringID),
+                        onClick = {
+                            if (onOptionSelected != null) {
+                                onOptionSelected(stringID)
+                            }
+                        },
+                        shapes = ListItemDefaults.segmentedShapes(
+                            listOfOptions.indexOf(stringID),
+                            listOfOptions.size
+                        ),
+                        colors = ListItemDefaults.segmentedColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                        ),
+                        leadingContent = {
+                            RadioButton(
                                 selected = (currentSelectedOption == stringID),
-                                onClick = {
-                                    if (onOptionSelected != null) {
-                                        onOptionSelected(stringID)
-                                    }
-                                },
-                                role = Role.RadioButton
+                                // Set to null for accessibility reasons.
+                                onClick = null
                             )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (currentSelectedOption == stringID),
-                            // Set to null for accessibility reasons.
-                            onClick = null
-                        )
+                        }
+                    )
+                    {
                         Text(
                             text = stringResource(stringID.stringResourceID),
                             style = MaterialTheme.typography.bodyLarge,
@@ -83,28 +92,29 @@ fun RadioButtonList(
                 }
             } else {
                 listOfMenuOptions?.forEach { gameMode ->
-
-                    Row(
-                        Modifier
-                            .height(56.dp)
-                            .fillMaxWidth()
-                            .selectable(
+                    SegmentedListItem(
+                        selected = (currentSelectedMenuOption == gameMode),
+                        onClick = {
+                            if (onMenuOptionSelected != null) {
+                                onMenuOptionSelected(gameMode)
+                            }
+                        },
+                        shapes = ListItemDefaults.segmentedShapes(
+                            gameMode.ordinal,
+                            listOfMenuOptions.size
+                        ),
+                        colors = ListItemDefaults.segmentedColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                        ),
+                        leadingContent = {
+                            RadioButton(
                                 selected = (currentSelectedMenuOption == gameMode),
-                                onClick = {
-                                    if (onMenuOptionSelected != null) {
-                                        onMenuOptionSelected(gameMode)
-                                    }
-                                },
-                                role = Role.RadioButton
+                                // Set to null for accessibility reasons.
+                                onClick = null
                             )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (currentSelectedMenuOption == gameMode),
-                            // Set to null for accessibility reasons.
-                            onClick = null
-                        )
+                        }
+                    )
+                    {
                         Text(
                             text = stringResource(
                                 when (gameMode) {
@@ -122,6 +132,5 @@ fun RadioButtonList(
                 }
             }
         }
-        HorizontalDivider()
     }
 }
