@@ -1,8 +1,10 @@
 package com.guillotine.jscorekeeper.ui.theme
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -76,6 +78,7 @@ private val ClueButtonColorScheme = darkColorScheme(
     onPrimary = ClueTextOrange
 )
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun JScorekeeperTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -93,34 +96,37 @@ fun JScorekeeperTheme(
         else -> lightColorScheme
     }
 
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ClueCardTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = ClueCardColorScheme,
         typography = ClueButtonTypography,
         content = content
     )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ScoreCardTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = ClueCardColorScheme,
         typography = ScoreCardTypography,
         content = content
     )
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ClueButtonTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = ClueButtonColorScheme,
         typography = ClueButtonTypography,
         content = content
