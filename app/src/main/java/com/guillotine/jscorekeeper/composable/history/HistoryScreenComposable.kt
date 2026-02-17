@@ -37,9 +37,14 @@ import com.guillotine.jscorekeeper.viewmodels.HistoryScreenViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.SegmentedListItem
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import com.guillotine.jscorekeeper.PastGamesListScreen
+import com.guillotine.jscorekeeper.composable.history.DeleteAllGamesDialog
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -70,10 +75,29 @@ fun HistoryScreenComposable(
                 ),
                 title = {
                     Text(stringResource(R.string.history))
+                },
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.showDeleteDialog()
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.outline_delete_24),
+                            contentDescription = stringResource(R.string.delete_icon_description)
+                        )
+                    }
                 }
             )
         }, modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
+        if (viewModel.isShowDeleteDialog) {
+            DeleteAllGamesDialog(
+                onDismissRequest = {viewModel.onDeleteDialogDismiss()},
+                onConfirmation = {
+                    viewModel.deleteAllGames()
+                    viewModel.onDeleteDialogDismiss()
+                }
+            )
+        }
         LazyColumn(
             modifier =
                 if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {

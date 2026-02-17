@@ -2,6 +2,7 @@ package com.guillotine.jscorekeeper.database
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
@@ -33,6 +34,9 @@ interface StatisticsDao {
 
     @Query("DELETE FROM games WHERE visible=0")
     suspend fun deleteSavedGame()
+
+    @Query("DELETE FROM games")
+    suspend fun deleteAllGames()
 
     @Query("UPDATE games SET visible=1 WHERE timestamp=:timestamp")
     suspend fun setVisible(timestamp: Long)
