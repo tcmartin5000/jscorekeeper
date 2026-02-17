@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -13,12 +15,12 @@ plugins {
 
 android {
     namespace = "com.guillotine.jscorekeeper"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.guillotine.jscorekeeper"
         minSdk = 29
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.1"
 
@@ -86,6 +88,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     // For saving statistics to a proper database.
     implementation(libs.androidx.room.runtime)
+    // Legacy icons, because they work fine for my purpose and I don't feel like upgrading rn.
+    implementation(libs.compose.material.icons)
     implementation(libs.androidx.paging.common.android)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)

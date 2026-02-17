@@ -1,31 +1,33 @@
 [versions]
-agp = "8.7.3"
-datastore = "1.1.1"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+agp = "9.0.1"
+datastore = "1.2.0"
+kotlin = "2.2.10"
+ksp = "2.3.2"
 kotlinxSerialization = "2.0.20"
-coreKtx = "1.15.0"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
 kotlinxCollectionsImmutable = "0.3.8"
 kotlinxSerializationJson = "1.7.3"
-lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.10.0"
-composeBom = "2025.01.01"
+lifecycleRuntimeKtx = "2.10.0"
+activityCompose = "1.12.4"
+composeBom = "2026.02.00"
 kotlinxSerializationCore = "1.7.3"
-lifecycleViewmodelCompose = "2.8.7"
-navigationCompose = "2.8.6"
-roomRuntime = "2.6.1"
-workRuntimeKtx = "2.10.0"
-room = "2.6.1"
-pagingCommonAndroid = "3.3.5"
-pagingRuntimeAndroid = "3.3.5"
-pagingComposeAndroid = "3.3.5"
-roomPaging = "2.6.1"
-coreSplashscreen = "1.2.0-alpha02"
-adaptiveAndroid = "1.0.0"
-windowCore = "1.4.0-beta02"
+lifecycleViewmodelCompose = "2.10.0"
+navigationCompose = "2.9.7"
+roomRuntime = "2.8.4"
+workRuntimeKtx = "2.11.1"
+room = "2.8.4"
+pagingCommonAndroid = "3.4.1"
+pagingRuntimeAndroid = "3.4.1"
+pagingComposeAndroid = "3.4.1"
+roomPaging = "2.8.4"
+coreSplashscreen = "1.2.0"
+adaptiveAndroid = "1.2.0"
+windowCore = "1.5.1"
+material3 = "1.5.0-alpha14"
+materialIcons = "1.7.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,7 +49,8 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "materialIcons" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose"}
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerializationCore"}
