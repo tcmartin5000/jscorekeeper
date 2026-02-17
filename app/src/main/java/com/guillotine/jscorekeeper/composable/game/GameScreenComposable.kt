@@ -2,6 +2,7 @@ package com.guillotine.jscorekeeper.composable.game
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -27,7 +28,7 @@ import com.guillotine.jscorekeeper.data.GameScreenSnackbarVisuals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun GameScreenComposable(navController: NavHostController, viewModel: GameScreenViewModel) {
 
@@ -40,19 +41,20 @@ fun GameScreenComposable(navController: NavHostController, viewModel: GameScreen
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ),
                 title = {
                     Text(
-                        "${
-                            stringArrayResource(R.array.round_names_indexed_by_multiplier)[viewModel.getMultiplier()]
-                        } - ${stringResource(R.string.round)} ${viewModel.round + 1}"
+
+                        stringArrayResource(R.array.round_names_indexed_by_multiplier)[viewModel.getMultiplier()]
+
                     )
-                }
+                },
+                subtitle = { Text("${stringResource(R.string.round)} ${viewModel.round + 1}") }
             )
         },
         snackbarHost = {
@@ -104,11 +106,7 @@ fun GameScreenComposable(navController: NavHostController, viewModel: GameScreen
                 onClueClick = { viewModel.showClueDialog(it) },
                 onNextRoundClick = { viewModel.showRoundDialog() },
                 isRemainingValue = {
-                    if (viewModel.columnsPerValue[it] != 0) {
-                        true
-                    } else {
-                        false
-                    }
+                    viewModel.columnsPerValue[it] != 0
                 }
             )
         }

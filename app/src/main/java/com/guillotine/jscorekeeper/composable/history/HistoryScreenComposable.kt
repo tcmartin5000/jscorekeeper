@@ -1,20 +1,16 @@
 package com.guillotine.jscorekeeper.composable.history
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,16 +37,17 @@ import com.guillotine.jscorekeeper.viewmodels.HistoryScreenViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.ui.text.style.TextAlign
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun HistoryScreenComposable(
     viewModel: HistoryScreenViewModel,
     navigationController: NavHostController
 ) {
     val frontBackPadding = 8.dp
-    val rowHeight = 64.dp
     val context = LocalContext.current
     /* Use the language from Android locale to convert into a Java locale, since that will recompose
        if it changes at runtime. Just like in the cards. Using YYYY-MM-DD format because in theory
@@ -64,88 +61,71 @@ fun HistoryScreenComposable(
         pagedScores = viewModel.getGamesList().collectAsLazyPagingItems()
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary
-            ),
-            title = {
-                Text(stringResource(R.string.app_name))
-            }
-        )
-    }, modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
+                title = {
+                    Text(stringResource(R.string.history))
+                }
+            )
+        }, modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
         LazyColumn(
             modifier =
-            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                Modifier
-                    .padding(innerPadding)
-                    .consumeWindowInsets(innerPadding)
-                    .windowInsetsPadding(WindowInsets.displayCutout)
-                    .fillMaxSize()
-            } else {
-                Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
-            },
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    Modifier
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding)
+                        .windowInsetsPadding(WindowInsets.displayCutout)
+                        .padding(frontBackPadding)
+                        .fillMaxSize()
+                } else {
+                    Modifier
+                        .padding(innerPadding)
+                        .padding(frontBackPadding)
+                        .fillMaxSize()
+                },
+            verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
         ) {
             if (viewModel.isPagingSourceLoaded && pagedScores.itemCount != 0) {
-                item { HorizontalDivider() }
+                val numGames = pagedScores.itemCount
                 items(
-                    count = pagedScores.itemCount,
+                    count = numGames,
                     key = pagedScores.itemKey { it.timestamp }
                 ) { gameIndex ->
                     val game = pagedScores[gameIndex]
                     if (game != null) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(rowHeight)
-                                .clickable {
-                                    coroutineScope.launch {
-                                        val gameData = processGameData(
-                                            applicationContext = context,
-                                            gameMode = viewModel.getGameMode(game.timestamp)
-                                        )
+                        SegmentedListItem(
+                            supportingContent = { Text(game.score.toString()) },
+                            onClick = {
+                                coroutineScope.launch {
+                                    val gameData = processGameData(
+                                        applicationContext = context,
+                                        gameMode = viewModel.getGameMode(game.timestamp)
+                                    )
 
-                                        navigationController.navigate(
-                                            ResultsScreen(
-                                                timestamp = game.timestamp,
-                                                score = game.score,
-                                                moneyValues = gameData.moneyValues,
-                                                multipliers = gameData.multipliers,
-                                                columns = gameData.columns,
-                                                currency = gameData.currency,
-                                                deleteCurrentSavedGame = false
-                                            )
+                                    navigationController.navigate(
+                                        ResultsScreen(
+                                            timestamp = game.timestamp,
+                                            score = game.score,
+                                            moneyValues = gameData.moneyValues,
+                                            multipliers = gameData.multipliers,
+                                            columns = gameData.columns,
+                                            currency = gameData.currency,
+                                            deleteCurrentSavedGame = false
                                         )
-                                    }
-                                },
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
+                                    )
+                                }
+                            },
+                            shapes = ListItemDefaults.segmentedShapes(gameIndex, numGames),
+                            colors = ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(start = frontBackPadding),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(dateFormat.format(game.timestamp))
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(end = frontBackPadding),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                Text(game.score.toString())
-                            }
+                            Text(dateFormat.format(game.timestamp))
                         }
-                        HorizontalDivider()
                     }
                 }
             } else {
