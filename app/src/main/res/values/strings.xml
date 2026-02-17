@@ -34,6 +34,9 @@
     <string name="history">History</string>
     <string name="current_score">Current score:</string>
     <string name="past_games_here">The results of past played games will appear here.</string>
+    <string name="delete_all_games">Delete all games?</string>
+    <string name="delete_all_games_warning">This will delete all saved games, including the game you are currently playing if there is one. Are you sure you want to continue?</string>
+    <string name="delete">Delete</string>
 
     <string-array name="round_names_indexed_by_multiplier">
         <item>Final J!</item>
@@ -51,4 +54,5 @@
     <string name="pass_icon_description">Pass Icon</string>
     <string name="daily_double_icon_description">Daily Double Icon</string>
     <string name="history_icon_description">View history</string>
+    <string name="delete_icon_description">Delete Icon</string>
 </resources>
