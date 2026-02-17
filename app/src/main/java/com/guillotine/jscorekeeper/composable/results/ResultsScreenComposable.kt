@@ -25,11 +25,11 @@ fun ResultsScreenComposable(
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ),
                 title = {
                     Text(stringResource(R.string.results))

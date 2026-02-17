@@ -69,7 +69,7 @@ fun HistoryScreenComposable(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 ),
                 title = {
-                    Text(stringResource(R.string.app_name))
+                    Text(stringResource(R.string.history))
                 }
             )
         }, modifier = Modifier.fillMaxSize()
