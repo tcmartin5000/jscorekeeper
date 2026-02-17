@@ -25,7 +25,7 @@ fun ResultsScreenComposable(
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
