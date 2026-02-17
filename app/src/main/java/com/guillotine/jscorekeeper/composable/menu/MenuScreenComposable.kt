@@ -56,12 +56,16 @@ fun MenuScreenComposable(
         }
     }
 
+    val frontBackPadding = 8.dp
+    val labelFrontPadding = 16.dp
+    val labelBottomPadding = 4.dp
+
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         topBar = {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surface
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             title = {
                 Text(stringResource(R.string.app_name))
@@ -101,10 +105,11 @@ fun MenuScreenComposable(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(start = labelFrontPadding, bottom = labelBottomPadding),
                     text = stringResource(R.string.select_game),
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Start
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 RadioButtonList(
                     currentSelectedMenuOption = viewModel.currentSelectedOption,
@@ -118,6 +123,7 @@ fun MenuScreenComposable(
                         GameModes.US_CELEB
                     ),
                     modifier = Modifier
+                        .padding(frontBackPadding)
                         .fillMaxWidth()
                         .weight(1f)
                 )
