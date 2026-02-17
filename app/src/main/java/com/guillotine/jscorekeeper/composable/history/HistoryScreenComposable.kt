@@ -48,7 +48,6 @@ fun HistoryScreenComposable(
     navigationController: NavHostController
 ) {
     val frontBackPadding = 8.dp
-    val rowHeight = 64.dp
     val context = LocalContext.current
     /* Use the language from Android locale to convert into a Java locale, since that will recompose
        if it changes at runtime. Just like in the cards. Using YYYY-MM-DD format because in theory
@@ -62,32 +61,34 @@ fun HistoryScreenComposable(
         pagedScores = viewModel.getGamesList().collectAsLazyPagingItems()
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary
-            ),
-            title = {
-                Text(stringResource(R.string.app_name))
-            }
-        )
-    }, modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                ),
+                title = {
+                    Text(stringResource(R.string.app_name))
+                }
+            )
+        }, modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
         LazyColumn(
             modifier =
-            if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                Modifier
-                    .padding(innerPadding)
-                    .consumeWindowInsets(innerPadding)
-                    .windowInsetsPadding(WindowInsets.displayCutout)
-                    .padding(frontBackPadding)
-                    .fillMaxSize()
-            } else {
-                Modifier
-                    .padding(innerPadding)
-                    .padding(frontBackPadding)
-                    .fillMaxSize()
-            },
+                if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    Modifier
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding)
+                        .windowInsetsPadding(WindowInsets.displayCutout)
+                        .padding(frontBackPadding)
+                        .fillMaxSize()
+                } else {
+                    Modifier
+                        .padding(innerPadding)
+                        .padding(frontBackPadding)
+                        .fillMaxSize()
+                },
             verticalArrangement = Arrangement.spacedBy(ListItemDefaults.SegmentedGap),
         ) {
             if (viewModel.isPagingSourceLoaded && pagedScores.itemCount != 0) {
@@ -121,39 +122,10 @@ fun HistoryScreenComposable(
                                 }
                             },
                             shapes = ListItemDefaults.segmentedShapes(gameIndex, numGames),
-                            colors = ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+                            colors = ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surface)
                         ) {
                             Text(dateFormat.format(game.timestamp))
                         }
-                        /*ListItem(
-                            headlineContent = { Text(dateFormat.format(game.timestamp)) },
-                            supportingContent = { Text(game.score.toString()) },
-                            modifier = Modifier.fillMaxWidth().selectable(
-                                selected = false,
-                                role = Role.Button,
-                                enabled = true,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        val gameData = processGameData(
-                                            applicationContext = context,
-                                            gameMode = viewModel.getGameMode(game.timestamp)
-                                        )
-
-                                        navigationController.navigate(
-                                            ResultsScreen(
-                                                timestamp = game.timestamp,
-                                                score = game.score,
-                                                moneyValues = gameData.moneyValues,
-                                                multipliers = gameData.multipliers,
-                                                columns = gameData.columns,
-                                                currency = gameData.currency,
-                                                deleteCurrentSavedGame = false
-                                            )
-                                        )
-                                    }
-                                }
-                            )
-                        )*/
                     }
                 }
             } else {
